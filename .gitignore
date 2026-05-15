@@ -1,0 +1,19 @@
+.env
+.env.local
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+*.egg-info/
+
+# local marketing assets — not meant for the public repo
+marketing/
+
+# local skill testing scratch area
+testing/
+
+# carousel PDF output (generated locally, uploaded manually)
+carousel_output/
+draft-carousels/
+
