@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/PRs-welcome-F59E0B.svg" alt="PRs Welcome">
 </p>
 
-10 skills that help Claude write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, and wait for your approval before anything gets published. No coding required.
+11 skills that help Claude write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, optimize format choice, and wait for your approval before anything gets published. No coding required.
 
 ## Install
 
@@ -94,7 +94,7 @@ Once installed, just talk to Claude. The right skill activates automatically.
 
 Every skill shows you a draft first and waits for your OK before doing anything. Nothing gets posted without your approval.
 
-## The 10 skills
+## The 11 skills
 
 | Skill | What it does |
 |---|---|
@@ -108,6 +108,7 @@ Every skill shows you a draft first and waits for your OK before doing anything.
 | **Engagement Monitor** | Two read-side workflows: (1) tracks your comment threads for author replies and drafts follow-ups in the 6-24h window; (2) pulls likers and commenters on any post and groups them by ICP fit (peer / aspirational / prospect). |
 | **Profile Optimizer** | Rewrites your headline, About section, Featured section, and Experience for 2026 conversion patterns |
 | **Employee Advocacy** | Plans a team LinkedIn program: 14-day launch, posting cadence, brand governance, ROI tracking |
+| **Format Optimizer** | Analyzes any post draft or topic and recommends the best format (text, carousel, poll, video, image) using a data-driven decision matrix. Two modes: --advise (pre-write) and --audit (post-write verification) |
 
 ## Optional: read LinkedIn data with Apify
 

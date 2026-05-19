@@ -5,7 +5,7 @@ description: Plan, draft, audit, and publish LinkedIn posts and comments. Use wh
 
 # LinkedIn Marketing Skills
 
-A bundle of 10 focused skills for LinkedIn content ops in 2026. Each skill is single-purpose, follows the draft → approval → publish pattern, and uses the [Publora API](https://publora.com) for posting.
+A bundle of 11 focused skills for LinkedIn content ops in 2026. Each skill is single-purpose, follows the draft → approval → publish pattern, and uses the [Publora API](https://publora.com) for posting.
 
 ## When to use this bundle
 
@@ -19,6 +19,7 @@ A bundle of 10 focused skills for LinkedIn content ops in 2026. Each skill is si
 - **Analyzing who liked / commented on any post (audience segmentation)** → use `linkedin-engager-analytics`
 - **Auditing / rewriting a LinkedIn profile** → use `linkedin-profile-optimizer`
 - **Running an employee advocacy program across a marketing team** → use `linkedin-employee-advocacy`
+- **Checking which format fits a post draft or topic best (carousel, text, poll, video, image)** → use `linkedin-format-optimizer`
 
 ## Core pattern
 
