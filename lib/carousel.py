@@ -40,10 +40,11 @@ CTA_PATTERNS = re.compile(
 EM_DASH = re.compile(r"—")
 
 LOGO_DIR = os.path.join(
-    "draft-carousels", "Claude",
+    "drafts", "draft-carousels", "Claude",
 )
 
 ACCENT_TAG = re.compile(r"\[/?(?:accent|primary)\]")
+RE_DECORATE = re.compile(r"\[decorate\]", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -165,9 +166,11 @@ class DraftParseResult:
     cleaned: str = ""
     logo_position: Optional[str] = None
     logo_name: str = ""
+    logo_size: str = "medium"
     diagram_slides: dict[int, dict] = field(default_factory=dict)
     slide_headings: dict[int, str] = field(default_factory=dict)
     has_accent: bool = False
+    decorate: bool = False
 
 
 def _pick_logo_path(name: str = "") -> Optional[str]:
@@ -213,6 +216,7 @@ def parse_draft(text: str) -> DraftParseResult:
     """
     result = DraftParseResult()
     result.has_accent = bool(ACCENT_TAG.search(text))
+    result.decorate = bool(RE_DECORATE.search(text))
 
     # ---- diagram blocks [[type: ...]] -----------------------------------
     diag_matches = list(RE_DIAGRAM_BLOCK.finditer(text))
@@ -231,6 +235,12 @@ def parse_draft(text: str) -> DraftParseResult:
             result.logo_position = "top-right"
         else:
             result.logo_position = "center-bottom"
+        if "tiny" in pos_text or "small" in pos_text:
+            result.logo_size = "small"
+        elif "large" in pos_text or "big" in pos_text:
+            result.logo_size = "large"
+        else:
+            result.logo_size = "medium"
 
     # ---- determine slide indices for diagram blocks ---------------------
     # We work on the cleaned text where ||| are preserved for splitting
@@ -249,6 +259,9 @@ def parse_draft(text: str) -> DraftParseResult:
     # Remove [accent] tags (they stay as markers for rendering)
     # but also remove pure instruction lines like [[diagram generated...]]
     cleaned = re.sub(r"\[\[[^\]]*diagram[^\]]*\]\]", "", cleaned)
+
+    # Remove [decorate] marker
+    cleaned = RE_DECORATE.sub("", cleaned)
 
     # Clean up blank lines from removals
     cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
@@ -466,6 +479,7 @@ def _draw_background(
     slide: dict,
     slide_num: int,
     total: int,
+    decorate: bool = False,
 ):
     accent = theme["accent"]
     accent2 = theme["accent2"]
@@ -479,6 +493,9 @@ def _draw_background(
     sfont = _load_font(SMALL_FONT_SIZE)
     num_text = f"{slide_num} / {total}"
     draw.text((CANVAS_W - 120, CANVAS_H - 50), num_text, fill=theme["num"], font=sfont)
+
+    if not decorate:
+        return
 
     if slide["is_cta"]:
         emoji_char = "💬"
@@ -525,16 +542,24 @@ def _draw_emoji_watermark(
 # Logo overlay
 # ---------------------------------------------------------------------------
 
+LOGO_SIZES = {
+    "small": (120, 60),
+    "medium": (180, 90),
+    "large": (300, 150),
+}
+
+
 def _draw_claude_logo(
     img: Image.Image,
     theme: dict,
     image_path: Optional[str] = None,
     position: str = "top-right",
+    logo_size: str = "medium",
 ):
     if image_path and os.path.isfile(image_path):
         try:
             logo = Image.open(image_path).convert("RGBA")
-            max_w, max_h = 180, 90
+            max_w, max_h = LOGO_SIZES.get(logo_size, (180, 90))
             lw, lh = logo.size
             scale = min(max_w / lw, max_h / lh, 1)
             nw, nh = int(lw * scale), int(lh * scale)
@@ -645,6 +670,8 @@ def render_slide(
     total: int,
     theme_name: str = "minimal",
     has_accent: bool = False,
+    decorate: bool = False,
+    diagram_image: Optional[Image.Image] = None,
 ) -> Image.Image:
     theme = THEMES.get(theme_name, THEMES["minimal"])
     img = Image.new("RGB", (CANVAS_W, CANVAS_H), theme["bg"])
@@ -654,11 +681,12 @@ def render_slide(
     body_font = _load_font(BODY_FONT_SIZE)
     cta_font = _load_font(BODY_FONT_SIZE)
 
-    _draw_background(draw, theme, slide, slide_num, total)
+    _draw_background(draw, theme, slide, slide_num, total, decorate=decorate)
 
+    text_w = CANVAS_W - 120
     margin_left = 60
-    text_w = CANVAS_W - margin_left - 60
-    y = 100
+    body_top = 100
+    y = body_top
 
     if slide["title"]:
         text = _clean_text(slide["title"])
@@ -693,6 +721,18 @@ def render_slide(
             for line in lines:
                 draw.text((margin_left, y), line, fill=color, font=font)
                 y += font.getbbox("Ag")[3] + 8
+
+    if diagram_image:
+        diagram_gap = 20
+        available_h = CANVAS_H - y - diagram_gap - 80
+        if available_h > 60:
+            diag_w = CANVAS_W - 120
+            diag = diagram_image.resize((diag_w, int(diag_w * diagram_image.height / diagram_image.width)), Image.LANCZOS)
+            if diag.height > available_h:
+                diag = diagram_image.resize((diag_w, available_h), Image.LANCZOS)
+            diag_y = y + diagram_gap
+            diag_x = 60
+            img.paste(diag, (diag_x, diag_y), diag if diag.mode == "RGBA" else None)
 
     return img
 
@@ -762,7 +802,7 @@ def preview_slide(
     total: int,
     *,
     theme_name: str = "minimal",
-    output_dir: str = "carousel_preview",
+    output_dir: str = "drafts/carousel_preview",
     has_accent: bool = False,
 ) -> str:
     """Render a single slide as a preview PNG.
@@ -793,7 +833,7 @@ def preview_themes(
     text: str,
     *,
     slide_index: int = 0,
-    output_dir: str = "carousel_preview",
+    output_dir: str = "drafts/carousel_preview",
 ) -> dict[str, str]:
     """Render slide *slide_index* (0-based) in every available theme.
 
@@ -809,16 +849,30 @@ def preview_themes(
     slide = slides[slide_index]
     total = len(slides)
 
+    os.makedirs(output_dir, exist_ok=True)
+    slug = (
+        re.sub(
+            r"[^a-zA-Z0-9]+",
+            "-",
+            (slide.get("title") or slide.get("body", ""))[:30],
+        )
+        .strip("-")
+        .lower()
+    )
+
     results: dict[str, str] = {}
     for theme_name in THEMES:
-        path = preview_slide(
+        img = render_slide(
             slide,
             slide_index + 1,
             total,
             theme_name=theme_name,
-            output_dir=output_dir,
             has_accent=parsed.has_accent,
         )
+        path = os.path.abspath(
+            os.path.join(output_dir, f"{theme_name}-slide-{slide_index + 1}-{slug}.png")
+        )
+        img.save(path, "PNG")
         results[theme_name] = path
 
     return results
@@ -838,6 +892,24 @@ def _check_overflow(text: str, font_size: int, max_width: int, max_height: int) 
     return None
 
 
+def _versioned_path(output_dir: str, base_name: str, ext: str) -> str:
+    """Return a path that won't overwrite an existing file.
+
+    Appends ``-v1``, ``-v2`` … to *base_name* until the path is free.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    candidate = os.path.join(output_dir, f"{base_name}{ext}")
+    if not os.path.isfile(candidate):
+        return os.path.abspath(candidate)
+
+    v = 1
+    while True:
+        candidate = os.path.join(output_dir, f"{base_name}-v{v}{ext}")
+        if not os.path.isfile(candidate):
+            return os.path.abspath(candidate)
+        v += 1
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -845,7 +917,7 @@ def _check_overflow(text: str, font_size: int, max_width: int, max_height: int) 
 def generate_carousel(
     post_text: str,
     *,
-    output_dir: str = "carousel_output",
+    output_dir: str = "drafts/carousel_output",
     title: Optional[str] = None,
     theme: str = "ink-yellow",
     draft: bool = False,
@@ -864,7 +936,7 @@ def generate_carousel(
         output_dir: Directory to save the PDF (or preview PNGs).
         title: Optional filename stem; auto-derived if omitted.
         theme: One of ``THEMES`` keys (default: ink-yellow).
-        draft: Save to ``draft-carousels/`` instead of *output_dir*.
+        draft: Save to ``drafts/draft-carousels/`` instead of *output_dir*.
         split_mode: ``"detect"`` (auto/manual based on content),
             ``"auto"`` (ignore markers), ``"manual"`` (require markers).
         logo: ``True`` for drawn badge, or a path to a logo image.
@@ -884,7 +956,7 @@ def generate_carousel(
         raise ValueError(f"Unknown theme '{theme}'. Available: {available}")
 
     if draft:
-        output_dir = "draft-carousels"
+        output_dir = "drafts/draft-carousels"
 
     # parse draft instructions
     parsed = parse_draft(post_text)
@@ -921,43 +993,43 @@ def generate_carousel(
     images: list[Image.Image] = []
     overflow_warnings: list[str] = []
     for i, s in enumerate(slides):
+        diagram_img = None
         if merged_diagrams and i in merged_diagrams:
             cfg = merged_diagrams[i]
             dt = cfg.get("type", "")
             if dt == "flowchart":
                 from lib.excalidraw import render_flowchart
-                images.append(render_flowchart(
+                diagram_img = render_flowchart(
                     cfg["steps"], THEMES[theme],
                     heading=cfg.get("heading", ""),
-                ))
+                )
             elif dt == "comparison":
                 from lib.excalidraw import render_comparison
-                images.append(render_comparison(
+                diagram_img = render_comparison(
                     cfg["left_title"], cfg.get("left_items", []),
                     cfg["right_title"], cfg.get("right_items", []),
                     THEMES[theme],
-                ))
+                )
             elif dt == "framework":
                 from lib.excalidraw import render_framework
-                images.append(render_framework(cfg.get("items", []), THEMES[theme]))
-            else:
-                images.append(
-                    render_slide(s, i + 1, len(slides), theme_name=theme, has_accent=parsed.has_accent)
-                )
-        else:
-            images.append(
-                render_slide(s, i + 1, len(slides), theme_name=theme, has_accent=parsed.has_accent)
-            )
+                diagram_img = render_framework(cfg.get("items", []), THEMES[theme])
+        images.append(
+            render_slide(s, i + 1, len(slides),
+                         theme_name=theme, has_accent=parsed.has_accent,
+                         decorate=parsed.decorate,
+                         diagram_image=diagram_img)
+        )
         # overflow check on body text
         body = s.get("body", "")
         if body:
-            warn = _check_overflow(body, BODY_FONT_SIZE, CANVAS_W - 120, CANVAS_H - 180)
+            text_w = CANVAS_W - 120 if not diagram_img else int(CANVAS_W * 0.55) - 60
+            warn = _check_overflow(body, BODY_FONT_SIZE, text_w, CANVAS_H - 180)
             if warn:
                 slug = (s.get("title") or body[:30]).strip()[:40]
                 overflow_warnings.append(f"  Slide {i + 1} ({slug}): {warn}")
 
     if logo_file and images and not preview_only:
-        _draw_claude_logo(images[0], THEMES[theme], image_path=logo_file, position=logo_position)
+        _draw_claude_logo(images[0], THEMES[theme], image_path=logo_file, position=logo_position, logo_size=parsed.logo_size)
 
     if not title:
         first_line = slides[0]["title"] or slides[0]["body"]
@@ -982,7 +1054,7 @@ def generate_carousel(
             saved.append(os.path.abspath(path))
 
         summary = (
-            f"Preview: {len(saved)} slides → {output_dir}/\n"
+            f"Preview: {len(saved)} slides -> {output_dir}/\n"
             + "\n".join(f"  {p}" for p in saved)
         )
         if overflow_warnings:
@@ -995,8 +1067,8 @@ def generate_carousel(
         prefix = "draft-"
     else:
         prefix = ""
-    filename = f"{prefix}{title.lower()}.pdf"
-    output_path = os.path.abspath(os.path.join(output_dir, filename))
+    base_name = f"{prefix}{title.lower()}"
+    output_path = _versioned_path(output_dir, base_name, ".pdf")
 
     build_pdf(images, output_path)
 

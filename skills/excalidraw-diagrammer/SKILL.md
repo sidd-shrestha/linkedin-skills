@@ -40,7 +40,7 @@ image for PDF inclusion.
    - `lib.excalidraw.build_comparison(left_title, left_items, right_title, right_items, heading)`
    - `lib.excalidraw.build_framework(items, title)`
 
-   Save to `draft-carousels/diagrams/<slug>.excalidraw`.
+    Save to `drafts/draft-carousels/diagrams/<slug>.excalidraw`.
 
 3. **Add to carousel (optional).** If a carousel is being built, pass the
    diagram as a `diagram_slides` entry to `generate_carousel()`:
@@ -51,7 +51,7 @@ image for PDF inclusion.
    ```
 
 4. **Tell the user.** Mention both files:
-   - "Diagram saved to `draft-carousels/diagrams/<slug>.excalidraw` — open in excalidraw.com to tweak"
+    - "Diagram saved to `drafts/draft-carousels/diagrams/<slug>.excalidraw` — open in excalidraw.com to tweak"
    - "Added to carousel as slide N"
 
 ## Examples
@@ -81,7 +81,7 @@ image for PDF inclusion.
 ## Files
 
 - `lib/excalidraw.py` — scene builders, Pillow renderers, save helpers
-- `draft-carousels/diagrams/` — saved `.excalidraw` JSON files
+- `drafts/draft-carousels/diagrams/` — saved `.excalidraw` JSON files
 
 ## Related skills
 

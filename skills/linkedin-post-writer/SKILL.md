@@ -45,11 +45,11 @@ Full skeletons in `../../references/hook-formulas.md`.
 5. **Run audit.** Optionally invoke `linkedin-humanizer --mode audit` for algorithm + voice checks before showing to user.
 6. **Approval card.** Show: formula used, full draft, char count, suggested posting window (Tue/Wed/Thu 7:30-9:00 AM local), reaction targets from likely commenters.
 7. **Carousel (optional).** If the user says "make a carousel" or includes `|||` in the draft:
-   - Call `from lib.carousel import generate_carousel`
-   - Auto-split by default (first paragraph = title, middle = body, CTA = last slide)
-   - If user placed `|||` markers in the draft, split at those markers instead
-   - Render a minimal-themed 1080×1080 PDF, saved to `carousel_output/<slug>.pdf`
-   - Tell the user: "Carousel saved to carousel_output/ — upload it manually to LinkedIn as a Document Carousel"
+    - Call `from lib.carousel import generate_carousel`
+
+    - Render a minimal-themed 1080×1080 PDF, saved to `drafts/carousel_output/<slug>.pdf`
+
+    - Tell the user: "Carousel saved to drafts/carousel_output/ — upload it manually to LinkedIn as a Document Carousel"
 8. **On approval.** Call `lib.publish(kind="post", draft_text=<approved>, target_url="https://www.linkedin.com/post/new/", platforms=[{"platform":"linkedin","platformId":<id>}], scheduled_time=<iso_or_None>, media_urls=<list_or_None>)`. The wrapper handles Publora / manual / diy routing.
 
 ## Hard rules (from user feedback)

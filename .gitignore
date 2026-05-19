@@ -14,6 +14,5 @@ marketing/
 testing/
 
 # carousel PDF output (generated locally, uploaded manually)
-carousel_output/
-draft-carousels/
+drafts/
 
