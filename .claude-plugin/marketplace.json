@@ -1,8 +1,8 @@
 {
   "name": "linkedin-skills",
   "owner": {
-    "name": "Serge Bulaev",
-    "url": "https://github.com/sergebulaev"
+    "name": "Sidd Shrestha",
+    "url": "https://github.com/sidd-shrestha"
   },
   "metadata": {
     "description": "Claude Code skills for LinkedIn growth: post writing, comment drafting, reply handler, hook extractor, humanizer (with bundled audit + AI-detector spread tester + emoji detector + rule explainer + algorithm-updater), profile optimizer, content planner, employee advocacy, thread monitor (author-reply tracking), engager analytics (likers/commenters ICP segmentation), excalidraw carousel diagrammer."

@@ -293,7 +293,12 @@ python lib/url_parser.py "https://www.linkedin.com/posts/dharmesh_activity-74488
 
 MIT. Powered by [Publora](https://publora.com).
 
+## Credits
+
+Originally created by [Serge Bulaev](https://github.com/sergebulaev). This repository is a maintained fork with extended features and updated heuristics.
+
 ## Related
 
+- [Original repository](https://github.com/sergebulaev/linkedin-skills) — Serge Bulaev's upstream
 - [Anthropic Skills repo](https://github.com/anthropics/skills)
 - `awesome-claude-skills` directory

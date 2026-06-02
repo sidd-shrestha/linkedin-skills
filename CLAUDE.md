@@ -24,11 +24,8 @@ otherwise.
 
 ## Commits
 
-- Primary author **must** be Sergey: every `git commit` needs
-  `--author="Sergey Bulaev <s@bulaev.org>"`. The harness defaults to the
-  Claude identity if you forget; verify with
-  `git log -1 --format='%an <%ae>'` before pushing.
-- Co-author trailer (`Co-Authored-By: Claude ...`) is fine and welcomed.
+- Commits use the local `git config user.name` / `user.email` identity.
+  No `--author` override needed. Do not add `Co-Authored-By` trailers.
 - Verify locally before push: build never breaks, no broken refs in
   `SKILL.md`, library smoke import passes.
 
