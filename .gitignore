@@ -16,3 +16,10 @@ testing/
 # carousel PDF output (generated locally, uploaded manually)
 drafts/
 
+# LinkedIn newsletter pastes -- login-walled content, not for public repo
+# README.md in this folder IS tracked (explains the workflow)
+newsletter-inbox/*.md
+newsletter-inbox/*.pdf
+newsletter-inbox/archive/
+!newsletter-inbox/README.md
+

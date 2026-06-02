@@ -6,7 +6,7 @@ Run every draft through this before publishing. **Any FAIL = fix before posting.
 
 - [ ] Strongest insight is in line 1 (inverted pyramid structure)
 - [ ] Reader would click "see more" — no throat-clearing, no "I want to share..."
-- [ ] First 265 chars earn the mobile expand click (desktop gets 210 chars)
+- [ ] First 140 chars earn the mobile expand click; desktop cutoff is 210 chars -- write for 140
 - [ ] No rhetorical question opener ("Have you ever...?")
 - [ ] No "In today's fast-paced world"
 
@@ -35,11 +35,13 @@ Run every draft through this before publishing. **Any FAIL = fix before posting.
 
 ## Algorithm safety
 
-- [ ] Zero external links in post body (move to first comment if needed)
+- [ ] If a link is included: it is in-body with preview card removed -- first-comment links are also suppressed under 360Brew; no link is always safest
+- [ ] Hashtags: 0-3 at end only; 0 is fine -- 360Brew reads topic from text, not hashtags
 - [ ] Not framing LinkedIn as inferior to other platforms
-- [ ] Publishing from personal profile (not company page — 6-8x reach difference)
+- [ ] Publishing from personal profile (not company page -- 6-8x reach difference)
 - [ ] Publish time matches author's usual slot (audience training)
-- [ ] Not the 2nd post today (360Brew cannibalizes 2+/day)
+- [ ] Not posting 8+ times this week (cannibalization signal above that threshold)
+- [ ] Post topic aligns with author's headline/About section topics (360Brew profile-content alignment)
 
 ## Post-publish plan (first 90 min)
 

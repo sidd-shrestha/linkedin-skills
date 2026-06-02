@@ -1,6 +1,6 @@
 ---
 name: linkedin-humanizer
-description: Scrub AI tells from any text draft OR audit a finished post against the 2026 algorithm heuristic checklist. Tier-based rewriter (forensic / strict / aesthetic / all) plus `--mode audit` for detection-only pass-fail review covering length, hook, CTA, format penalties, AI vocab. Sub-tools: emoji-pattern detector, multi-detector spread tester (GPTZero, Originality.ai, ZeroGPT, Sapling, Copyleaks), rule explainer. Triggers on "humanize", "de-AI", "review this draft", "audit before posting", "is this ready".
+description: Scrub AI tells from any text draft OR audit a finished post against the 2026 algorithm checklist. Tier-based rewriter (forensic / strict / aesthetic / all) plus `--mode audit` for pass-fail review (length, hook, CTA, AI vocab) and `--mode update-heuristics` to fetch trusted sources and diff against current heuristics. Sub-tools: emoji-pattern detector, multi-detector spread tester, rule explainer, algorithm-updater. Triggers on "humanize", "de-AI", "audit before posting", "update heuristics".
 ---
 
 # LinkedIn Humanizer V2
@@ -58,6 +58,11 @@ linkedin-humanizer --mode all <text>
 # Runs the 2026 algorithm checklist: length, hook, CTA, structure, AI tells.
 # Returns Blockers + Warnings + suggested fixes. See sub-skills/post-audit.md.
 linkedin-humanizer --mode audit <text>
+
+# Update-heuristics — fetch trusted sources and diff against current algorithm-heuristics.md.
+# Proposes a changelog entry + file edits. Does not write anything without approval.
+# See sub-skills/algorithm-updater.md for the full workflow.
+linkedin-humanizer --mode update-heuristics
 ```
 
 ## The three passes

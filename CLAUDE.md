@@ -34,8 +34,10 @@ otherwise.
 
 ## Skill bundle invariants
 
-- **Exactly 10 skills.** Adding requires merging or splitting elsewhere
-  to stay at 10. The number is announced in `plugin.json` and the README.
+- **No hard cap on skill count.** Add skills freely when the scope is
+  genuinely distinct and not covered by an existing skill. When adding,
+  update `plugin.json`, `marketplace.json`, the root `SKILL.md` bundle
+  list, and the README skill table to keep them consistent.
 - **Frontmatter `description:` target ≤ 400 chars** (some bundle-heavy
   skills land slightly higher when their scope is genuinely broad — keep
   under 510). Always include a "Not for X (use Y)" disambiguation
@@ -96,7 +98,7 @@ Run from repo root:
 ```bash
 python3 -c "from lib import publish, fetch_post, ApifyClient, PubloraClient; print('OK')"
 wc -l SKILL.md skills/*/SKILL.md
-ls skills/ | wc -l        # must equal 10
+ls skills/ | wc -l        # sanity check — update plugin.json and README if count changes
 grep -nE '^description:' skills/*/SKILL.md SKILL.md | grep -E '—|–'   # must be empty
 ```
 

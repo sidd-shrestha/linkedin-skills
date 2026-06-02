@@ -1,6 +1,10 @@
 # 2026 LinkedIn Posting Heuristics
 
-Based on 360Brew paper (arXiv 2501.16450), AuthoredUp 2026 reach data, Trust Insights Q1 2026 guide, and Social Media Today reporting on Gyanda Sachdeva's anti-pod measures.
+**Last verified:** 2026-06-02
+**Changelog:** see `references/algorithm-changelog.md`
+**Update workflow:** run `linkedin-humanizer --mode update-heuristics` to check for staleness
+
+Sources: 360Brew paper (arXiv 2501.16450), AuthoredUp analysis of 3M+ posts Mar 2025-Feb 2026 (updated May 2026), AuthoredUp 360Brew explainer (updated Apr 2026), Buffer LinkedIn Algorithm guide quoting LinkedIn VP Dan Roth + Director of PM Alice Xiong (Dec 2025), LinkedIn Pressroom (vertical video feed launch 2026), LinkedIn Guide to Creating newsletter (Jun 2026 -- "Turn your Insight into Influence").
 
 ## Timing
 
@@ -12,16 +16,29 @@ Based on 360Brew paper (arXiv 2501.16450), AuthoredUp 2026 reach data, Trust Ins
 
 Avoid: Mon before 9 AM, Fri after 2 PM, Sat/Sun (30-50% reach cut for B2B).
 
-## Format reach multipliers (relative to single image)
+## Format reach multipliers (relative to each profile's own median post)
 
-| Format | Multiplier |
-|---|---|
-| Document carousel (PDF) | 1.7-2.3x |
-| Native video (<90s, captioned, vertical 9:16) | 1.4-1.8x |
-| Text-only | 1.0-1.3x |
-| Poll | 1.1x |
-| Single image | 1.0x (baseline) |
-| External link in body | 0.4-0.6x |
+Source: AuthoredUp analysis of 3M+ LinkedIn posts, personal profiles, Mar 2025-Feb 2026.
+Multipliers are relative to the profile's own median -- not cross-profile comparisons.
+
+| Format | Reach multiplier | Engagement multiplier | Notes |
+|---|---|---|---|
+| Document carousel (PDF) | **1.39x** | **1.30x** | Best combined performer; only 4.88% of creators use it. Note: LinkedIn updated the feed UI in Jun 2026 to display document posts in a compact carousel format (similar to multi-photo posts) -- distribution and ranking logic unchanged (confirmed by LinkedIn creator newsletter) |
+| Single image | **1.20x** | **1.33x** | Highest engagement multiplier; reliable volume play |
+| Poll | **1.78x reach** | **0.37x engagement** | Reach trap -- votes are not conversations |
+| Text-only | **1.07x** | **0.78x** | Near-average reach, below-average engagement |
+| Native video | **0.86x** | **0.93x** | -36% YoY; longer videos (3+ min) outperform short clips |
+| LinkedIn Article | **0.69x** | **0.44x** | Poor feed reach; use for SEO/evergreen, not distribution |
+| Reshare | **0.29x** | **0.22x** | Worst format; write your own post instead |
+
+**Format by follower count** (best reach format shifts with audience size):
+
+| Follower bracket | Top reach format | Notes |
+|---|---|---|
+| 0-5K | Image | Low-friction, algorithm pushes beyond network |
+| 5K-20K | Image + Document mix | Documents start compounding |
+| 20K-50K | Document | 1.30x reach |
+| 50K+ | Document | 1.49x reach -- largest gap at this tier |
 
 ## Length
 
@@ -32,16 +49,28 @@ Avoid: Mon before 9 AM, Fri after 2 PM, Sat/Sun (30-50% reach cut for B2B).
 
 ## Hashtags
 
-- **0 hashtags** performs equal to or better than 5+ in 2026 (360Brew uses semantic embeddings, not tag matching)
-- **1-3 niche hashtags** (<50k posts) give marginal lift (~5%)
+360Brew reads topic from the post's text content using semantic embeddings -- hashtags are no longer
+a meaningful distribution lever. LinkedIn's own editorial director Laura Lorenzetti confirmed (via Buffer, Dec 2025):
+"a nice to have, not a need to have. Don't use too many, and it's ok if you don't use them."
+
+- **0 hashtags** is fine; performs equal to or better than 5+
+- **1-3 niche hashtags** may still help human readers navigate topics; negligible algorithmic effect
 - **5+ hashtags** correlate with spammy-account patterns (negative signal)
-- Placement: end of post, never mid-sentence
+- Placement: end of post only, never mid-sentence
+- Do not use hashtags as a substitute for clear topic writing -- 360Brew ignores them for ranking
 
 ## Link placement
 
-- **Link in first comment:** ~2.1x impressions vs in-body link
-- **In-body:** suppressed 40-60%
-- **Workaround phrasing:** "Source below ↓", "Dropped the piece in comments"
+Previous advice (links in first comment = 2.1x) is no longer accurate.
+LinkedIn's own team (Dan Roth, VP of Content; Buffer Dec 2025) and AuthoredUp 360Brew research both
+indicate first-comment links are also suppressed under 360Brew.
+
+Current guidance:
+- **If linking is necessary:** put the link in the post body; remove the auto-generated preview card to reduce the visual signal to the algorithm; accept ~15-20% lower reach vs a no-link post
+- **First comment links:** also deboosted -- not a reliable workaround
+- **Best approach:** write a post that delivers full value without the link; if readers want the source they'll ask; add the link only when the post itself clearly explains the value of clicking
+- LinkedIn's team explicitly said: "if you're writing great knowledge in that post, people are also more likely to be interested in what more they can get if they go to that link" -- the post quality, not link placement, determines whether the link gets clicks
+- **Workaround phrasing** ("Source below ↓") adds no reach benefit under 360Brew and may read as engagement bait
 
 ## Signal weights (reported; not officially confirmed)
 
@@ -58,36 +87,93 @@ Avoid: Mon before 9 AM, Fri after 2 PM, Sat/Sun (30-50% reach cut for B2B).
 - Author reply to every comment within 90 min = required to hit the ceiling
 - If 3+ substantive comments arrive in first 30 min, post gets second testing boost
 
+## Delayed engagement (360Brew signal -- NEW)
+
+Source: AuthoredUp 360Brew explainer (Apr 2026).
+
+- Engagement arriving **24-72 hours after posting** triggers 4-6x better performance in "Suggested for you" feeds
+- 360Brew does not treat a post as "done" after 24h -- it re-checks older posts when new engagement matches topic clusters
+- Posts that keep collecting saves and in-depth comments get a second distribution wave
+- Implication: reply to comments that arrive days later; don't abandon a post after day 1
+
+## Profile-content alignment (360Brew signal -- NEW)
+
+Source: arXiv 2501.16450 + AuthoredUp 360Brew explainer (Apr 2026).
+
+360Brew reads both your profile and your posts as text, then checks whether they align.
+A mismatch between stated expertise and post topics suppresses distribution.
+
+- Your **headline and About section** should explicitly name your 2-3 core topics
+- **80%+ of posts** should fall within those topic areas
+- Allow ~**90 days** of consistent, aligned posting for 360Brew to fully categorize you
+- "General Business" content (broad, unfocused) underperforms at **0.81x reach**
+- Niche-specific content (e.g., "LinkedIn Content Creation") reaches **1.61x** median
+- Scheduling posts does not penalize reach -- confirmed by LinkedIn's own team (Buffer Dec 2025)
+
+## Posting frequency
+
+Source: AuthoredUp analysis of 3M+ posts, personal profiles.
+
+| Frequency | % of profiles | Median engagement rate | Median impressions/post |
+|---|---|---|---|
+| 1 post/week | 79.80% | 2.40% | 679 |
+| 2-3 posts/week | 13.17% | 2.58% | 741 |
+| 4-5 posts/week | 4.45% | **2.60%** | **870** |
+| 6-7 posts/week | 1.61% | 2.54% | 959 |
+| 8+ posts/week | 0.97% | 1.79% | 586 |
+
+- **Sweet spot: 4-5 posts/week** -- highest engagement rate and 28% more impressions per post than once-weekly
+- **8+ posts/week** causes sharp drop in both metrics -- audience fatigue + cannibalization
+- 80% of profiles post only once a week; moving to 3-5 with quality content outperforms the vast majority
+- Scheduling posts is **not penalized** -- confirmed by LinkedIn's own team (Buffer Dec 2025)
+
 ## Penalties
 
-- Comment pods: **97% detection accuracy** (third-party claim, unconfirmed). Penalty: shadowban 3-14 days, reach cut 60-90%.
+- Comment pods: **97% detection accuracy** (third-party claim). 360Brew measures lexical diversity and cluster overlap -- 5 unique varied comments outperform 50 identical "great post" reactions. Penalty: shadowban 3-14 days, reach cut 60-90%.
 - TOS change: "We may limit how many comments a member can make in a time period."
 - Recycled reply templates on own post: lexical-similarity detection downranks.
-- Over-posting: 2+ posts/day triggers cannibalization signal (360Brew deprioritizes accounts posting 2+/day).
+- Over-posting: 8+ posts/week triggers cannibalization and audience fatigue signal.
 
 ## Native articles
 
-- Lift is real but modest: ~1.2-1.4x vs regular text post
-- Long-tail SEO via Google indexing (bonus)
-- Use for evergreen/reference; not for timely takes
+Source: AuthoredUp 3M post study (May 2026) contradicts earlier lift claims.
 
-## 2026 AuthoredUp format benchmarks (absolute engagement rates)
+- Feed reach: **0.69x** reach multiplier, **0.44x** engagement -- underperforms all feed post formats
+- LinkedIn Marketing Solutions Blog (Mar 2026): Articles are becoming stronger for **AI search discoverability** (cited and indexed by AI models) -- a different value proposition than feed reach
+- Long-tail SEO via Google indexing remains a genuine bonus
+- Use for **evergreen/reference content** where AI search and SEO value matter; not for feed distribution or timely takes
+- Reshares perform even worse: **0.29x reach, 0.22x engagement** -- write your own post referencing the content and tag the author instead
 
-| Format | Engagement rate / reach |
-|---|---|
-| Multi-image (3-4 personal photos) | **6.60%** engagement rate (highest of all formats) |
-| Carousel (doc post, 6-9 slides, <12 words/slide) | ~6x engagement, ~4x reach vs text-only |
-| Poll | +206% reach vs average post |
-| Single image | 0.7x (now underperforms text-only by ~30%) |
-| Native video (30-90s, captioned) | reach -35% YoY in 2026; still viable with strong hook |
+## Engagement benchmarks by format (AuthoredUp 3M post study, Mar 2025-Feb 2026)
+
+See "Format reach multipliers" section above for reach/engagement multipliers.
+Additional context:
+
+- Document posts account for **12.92% of all saves** -- roughly 2.6x their share of total content
+- Polls generate votes, not conversations -- votes do not correlate with profile visits, follows, or pipeline
+- Video reach dropped **36% YoY** for personal profiles; company pages (top 5%) see 1.72x reach from video
+- Single image drives **highest engagement multiplier** (1.33x) -- best for comments and conversation
+- Posting frequency of 4-5/week produces **28% more impressions per post** than once-weekly
 
 ## Native video rules
 
-- Length: **30-90 seconds**
-- Captions mandatory (85% of users watch without sound)
-- **Native upload only** — YouTube links kill reach
-- Hook visually in first 3 seconds
-- Vertical 9:16, not landscape
+Longer videos outperform shorter ones (AuthoredUp analysis of 36,946 video posts, Oct 2025-Mar 2026):
+
+| Duration | Reach multiplier | Engagement multiplier |
+|---|---|---|
+| 3 min+ | **1.21x** | **1.17x** |
+| 90s-3 min | 1.07x | 1.09x |
+| 60-90s | 0.97x | 1.00x |
+| 30-60s | 0.95x | 0.96x |
+| 0-30s | 0.96x | 0.91x |
+
+- Short clips (TikTok-style, under 60s) perform worst -- LinkedIn is not a short-form platform
+- **Aim for 90s-3+ min** with dense substance; avoid padding
+- Captions mandatory (majority of users watch without sound)
+- **Native upload only** -- YouTube links get ~60% reach cut
+- Hook in first 3 seconds visually
+- **9:16 vertical** to surface in LinkedIn's dedicated swipeable video feed (launched 2026); square (1:1) is safe fallback
+- LinkedIn's vertical video feed surfaces content to non-followers -- use it for discovery
 
 ## Hook cutoff (device-specific)
 
@@ -160,15 +246,16 @@ Observed real consequence: one creator dropped from 8,500 to 340 impressions ove
 
 ## Pre-publish checklist
 
-- [ ] Hook fits in first 210 chars
+- [ ] Hook fits in first 210 chars (desktop); write for 140-char mobile line as primary target
 - [ ] No em dashes (`—`), en dashes (`–`), double dashes (`--`)
 - [ ] No AI vocabulary blacklist (leverage, fundamentally, delve, etc.)
 - [ ] At least 1 specific number per 100 words
 - [ ] At least 1 named entity (person, company, product)
 - [ ] At least 1 first-person concrete detail (what you saw, did, said)
-- [ ] No external links in body
-- [ ] 0-2 hashtags at end
+- [ ] If linking: link is in-body with preview card removed, OR omitted entirely -- first-comment links are no longer a reliable workaround
+- [ ] 0-3 hashtags at end (optional; 0 is fine)
 - [ ] Length 900-1,300 for medium, 1,500-1,900 for long
 - [ ] Line breaks between ideas, not every sentence
 - [ ] One moment of real vulnerability or stakes
-- [ ] Close is a question OR a clean landing (not "what do you think?")
+- [ ] Close is a specific answerable question OR a clean landing (not "what do you think?")
+- [ ] Profile headline/About section topics match the post topic (360Brew alignment check)

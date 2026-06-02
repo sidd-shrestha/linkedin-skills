@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://shared.co.actor/img/linkedin-skills-hero.jpg" alt="10 Claude Code skills for LinkedIn marketing — open source, MIT licensed" width="900" />
+  <img src="https://shared.co.actor/img/linkedin-skills-hero.jpg" alt="12 Claude Code skills for LinkedIn marketing — open source, MIT licensed" width="900" />
 </p>
 
 # LinkedIn Marketing Skills for Claude
@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/PRs-welcome-F59E0B.svg" alt="PRs Welcome">
 </p>
 
-11 skills that help Claude write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, optimize format choice, and wait for your approval before anything gets published. No coding required.
+12 skills that help Claude write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, optimize format choice, keep the algorithm heuristics up to date, and wait for your approval before anything gets published. No coding required.
 
 ## Install
 
@@ -94,7 +94,7 @@ Once installed, just talk to Claude. The right skill activates automatically.
 
 Every skill shows you a draft first and waits for your OK before doing anything. Nothing gets posted without your approval.
 
-## The 11 skills
+## The 12 skills
 
 | Skill | What it does |
 |---|---|
@@ -109,6 +109,7 @@ Every skill shows you a draft first and waits for your OK before doing anything.
 | **Profile Optimizer** | Rewrites your headline, About section, Featured section, and Experience for 2026 conversion patterns |
 | **Employee Advocacy** | Plans a team LinkedIn program: 14-day launch, posting cadence, brand governance, ROI tracking |
 | **Format Optimizer** | Analyzes any post draft or topic and recommends the best format (text, carousel, poll, video, image) using a data-driven decision matrix. Two modes: --advise (pre-write) and --audit (post-write verification) |
+| **Excalidraw Diagrammer** | Generates editable `.excalidraw` diagram scenes (flowcharts, comparisons, frameworks) for LinkedIn carousel slides. Renders directly into carousel PDFs alongside text slides. |
 
 ## Optional: read LinkedIn data with Apify
 
@@ -196,6 +197,8 @@ Every skill follows these rules automatically:
 
 ## Cross-cutting references
 
+- [`references/algorithm-heuristics.md`](references/algorithm-heuristics.md) — canonical 2026 LinkedIn ranking rules: timing, format multipliers, signal weights, penalties
+- [`references/algorithm-changelog.md`](references/algorithm-changelog.md) — dated log of algorithm changes with sources; run `linkedin-humanizer --mode update-heuristics` to check for staleness
 - [`references/industry-benchmarks.md`](references/industry-benchmarks.md) — engagement rates, time-per-post, reach multipliers across industries
 - [`references/engagement-metrics-taxonomy.md`](references/engagement-metrics-taxonomy.md) — what to measure at post / account / team / business level
 

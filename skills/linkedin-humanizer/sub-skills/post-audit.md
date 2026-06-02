@@ -26,25 +26,31 @@ Run any post draft through the 2026 heuristic checklist. Catches AI tells, timin
 
 ### Blockers (auto-fail)
 1. Em dash / en dash / double dash present
-2. External link in body (not in first comment)
+2. External link in body AND the post itself delivers no standalone value (link-only posts)
 3. Post exceeds 3,000 chars (LinkedIn hard limit)
 4. Opens with "In today's fast-paced world..." or similar
 5. Ends with "What do you think?" or "Thoughts?"
 6. Contains AI vocabulary blacklist words (see `../references/audit-ai-tells.md`)
 7. Frames LinkedIn as inferior in a LinkedIn post (algo penalty)
 
+Note on links: a link in the post body is no longer an automatic blocker. Under 360Brew,
+first-comment links are also suppressed. If a link is present, check that the post delivers
+full value without clicking it. Flag as a Warning (not Blocker) if the post reads as
+link-dependent. See `../../references/algorithm-heuristics.md` §Link placement.
+
 ### Warnings (flag with suggested fix)
-8. Hook doesn't fit in first 210 chars (mobile `…see more` cutoff)
+8. Hook doesn't fit in first 140 chars (mobile `…see more` cutoff; 210 chars is desktop)
 9. Length outside 900-1,300 sweet spot (or 1,500-1,900 for long-form with breaks)
 10. Uniform sentence length (all 15-22 words)
 11. No specific number per 100 words
 12. No named entity
 13. No first-person sensory detail
 14. Rule-of-three list without receipts
-15. More than 2 hashtags
+15. More than 3 hashtags (0-3 is fine; 0 is acceptable -- hashtags are optional under 360Brew)
 16. User's own product named more than once
 17. Missing reaction-prompting moment (vulnerability, stakes, question)
 18. Passive voice >10%
+19. Post topic does not match author's stated headline/About section expertise (360Brew profile-alignment risk)
 
 ### Info (neutral notes)
 19. Suggested posting time given audience
