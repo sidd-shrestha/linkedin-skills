@@ -1,7 +1,7 @@
 {
   "name": "linkedin-skills",
   "description": "12 Claude Code skills for LinkedIn marketing: post writing, comment drafting, reply handler, hook extractor, humanizer (rewrite + audit + emoji + detector + rules + algorithm-updater sub-tools), profile optimizer, content planner, employee advocacy, thread monitor (author replies), engager analytics (likers + commenters ICP segmentation), format optimizer (advise + audit), excalidraw carousel diagrammer.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Siddhartha Shrestha",
     "url": "https://github.com/sidd-shrestha"
