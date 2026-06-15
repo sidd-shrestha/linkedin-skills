@@ -96,6 +96,7 @@ See `references/example-plan-week.md` for a filled-in 7-day plan.
 
 ## Related skills
 
+- `linkedin-content-architect` — assesses raw ideas and feeds mature topics into the planner
 - `linkedin-post-writer` — generate each day's draft from the plan
 - `linkedin-comment-drafter` — execute the daily comment targets
 - `linkedin-thread-monitor` — track inbound from the comment strategy

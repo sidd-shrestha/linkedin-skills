@@ -7,7 +7,8 @@ drafts/
 ├── ideas/             ← raw captured ideas, one-liners, snippets from Obsidian
 ├── draft-post/        ← full post drafts ready for polishing
 ├── carousel_output/   ← generated carousel PDFs
-└── carousel_preview/  ← slide preview PNGs
+├── carousel_preview/  ← slide preview PNGs
+└── archive/           ← executed ideas (+ executed-ideas.md log)
 ```
 
 The entire `drafts/` folder is gitignored — nothing inside gets committed.
@@ -36,6 +37,7 @@ Rotate across pillars — no fixed percentages, but covers:
 5. **Humanize** via linkedin-humanizer (scrub AI tells, enforce voice)
 6. **Approve** — review card, reply "yes" to publish
 7. **Publish** — manual copy-paste or auto-publish via Publora
+8. **Archive** — move idea file from `drafts/ideas/` → `drafts/archive/` and log in `executed-ideas.md`
 
 ## Post-Publishing Engagement
 - Reply to all comments (within 1-2 hours)

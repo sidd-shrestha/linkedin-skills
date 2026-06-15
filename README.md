@@ -94,7 +94,7 @@ Once installed, just talk to Claude. The right skill activates automatically.
 
 Every skill shows you a draft first and waits for your OK before doing anything. Nothing gets posted without your approval.
 
-## The 12 skills
+## The 13 skills
 
 | Skill | What it does |
 |---|---|
@@ -109,6 +109,7 @@ Every skill shows you a draft first and waits for your OK before doing anything.
 | **Profile Optimizer** | Rewrites your headline, About section, Featured section, and Experience for 2026 conversion patterns |
 | **Employee Advocacy** | Plans a team LinkedIn program: 14-day launch, posting cadence, brand governance, ROI tracking |
 | **Format Optimizer** | Analyzes any post draft or topic and recommends the best format (text, carousel, poll, video, image) using a data-driven decision matrix. Two modes: --advise (pre-write) and --audit (post-write verification) |
+| **Content Architect** | Assesses raw ideas and notes to recommend a content strategy -- expand into long-form, atomize into micro-content, serialize across weeks, or publish as a single post. Routes to post-writer, format-optimizer, or content-planner for execution. |
 | **Excalidraw Diagrammer** | Generates editable `.excalidraw` diagram scenes (flowcharts, comparisons, frameworks) for LinkedIn carousel slides. Renders directly into carousel PDFs alongside text slides. |
 
 ## Optional: read LinkedIn data with Apify

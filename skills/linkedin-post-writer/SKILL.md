@@ -79,5 +79,6 @@ Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific
 
 ## Related skills
 
+- `linkedin-content-architect` — assesses raw ideas so you know whether to write one post or a full series
 - `linkedin-humanizer` — aggressive AI-tell scrubber, plus `--mode audit` for pre-publish review
 - `linkedin-hook-extractor` — reverse-engineer a hook from a viral post you admire

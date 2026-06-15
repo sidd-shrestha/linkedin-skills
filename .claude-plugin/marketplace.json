@@ -5,14 +5,14 @@
     "url": "https://github.com/sidd-shrestha"
   },
   "metadata": {
-    "description": "Claude Code skills for LinkedIn growth: post writing, comment drafting, reply handler, hook extractor, humanizer (with bundled audit + AI-detector spread tester + emoji detector + rule explainer + algorithm-updater), profile optimizer, content planner, employee advocacy, thread monitor (author-reply tracking), engager analytics (likers/commenters ICP segmentation), excalidraw carousel diagrammer."
+    "description": "Claude Code skills for LinkedIn growth: post writing, comment drafting, reply handler, hook extractor, humanizer (with bundled audit + AI-detector spread tester + emoji detector + rule explainer + algorithm-updater), profile optimizer, content planner, employee advocacy, thread monitor (author-reply tracking), engager analytics (likers/commenters ICP segmentation), format optimizer, content architect, excalidraw carousel diagrammer."
   },
   "plugins": [
     {
       "name": "linkedin-skills",
       "source": "./",
-      "description": "Bundle of 12 LinkedIn marketing skills with verified 2026 hook formulas, comment + reply templates that earn author replies, a unified humanizer (rewrite + `--mode audit` pre-publish check, plus bundled emoji-detector, detector-spread tester, rule-explainer, algorithm-updater sub-tools), profile rewriter, content planner, employee advocacy playbook, thread monitor (Kevin Payne window author-reply tracking), engager analytics (likers + commenters ICP segmentation), format optimizer (advise + audit for text, carousel, poll, video, image), and excalidraw carousel diagrammer.",
-      "version": "1.0.4",
+      "description": "Bundle of 13 LinkedIn marketing skills with verified 2026 hook formulas, comment + reply templates that earn author replies, a unified humanizer (rewrite + `--mode audit` pre-publish check, plus bundled emoji-detector, detector-spread tester, rule-explainer, algorithm-updater sub-tools), profile rewriter, content planner, employee advocacy playbook, thread monitor (Kevin Payne window author-reply tracking), engager analytics (likers + commenters ICP segmentation), format optimizer (advise + audit for text, carousel, poll, video, image), content architect (raw idea assessment + strategy), and excalidraw carousel diagrammer.",
+      "version": "1.0.5",
       "author": {
         "name": "Serge Bulaev",
         "url": "https://github.com/sergebulaev"

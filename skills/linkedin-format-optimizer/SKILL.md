@@ -106,6 +106,7 @@ Global voice rules: see root `SKILL.md` section Voice rules. Additional skill-sp
 
 ## Related skills
 
+- `linkedin-content-architect` -- assesses raw ideas and recommends whether to expand, atomize, serialize, or single-post before format selection
 - `linkedin-post-writer` -- creates posts and carousels from scratch using hook formulas
 - `linkedin-humanizer` -- AI-tell scrubber and `--mode audit` pre-publish review
 - `linkedin-content-planner` -- weekly format mix planning across pillars

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carousel</title>
+<style>
+{% include 'themes.css' %}
+</style>
+</head>
+<body>
+{% for slide in slides %}
+<div class="slide">
+  <div class="stripe"></div>
+
+  {% if slide.title_html %}
+  <div class="title">{{ slide.title_html }}</div>
+  <div class="title-underline"></div>
+  {% endif %}
+
+  {% if slide.body_html %}
+  <div class="body{% if slide.is_cta %} cta{% endif %}">{{ slide.body_html }}</div>
+  {% endif %}
+
+  {% if slide.diagram_src %}
+  <img class="diagram" src="{{ slide.diagram_src }}" alt="Diagram">
+  {% endif %}
+
+  {% if slide.watermark %}
+  <div class="watermark">{{ slide.watermark }}</div>
+  {% endif %}
+
+  <div class="progress"><div class="progress-fill" style="width: {{ (slide.slide_num / total) * 100 }}%"></div></div>
+  <div class="slide-num">{{ slide.slide_num }} / {{ total }}</div>
+
+  {% if slide.slide_num == 1 and logo_file and not logo_drawn %}
+  <img class="logo logo-{{ logo_position }} logo-{{ logo_size }}" src="{{ logo_file }}" alt="Logo">
+  {% endif %}
+</div>
+{% endfor %}
+</body>
+</html>

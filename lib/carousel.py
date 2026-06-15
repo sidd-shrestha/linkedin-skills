@@ -917,6 +917,7 @@ def _versioned_path(output_dir: str, base_name: str, ext: str) -> str:
 def generate_carousel(
     post_text: str,
     *,
+    renderer: str = "pillow",
     output_dir: str = "drafts/carousel_output",
     title: Optional[str] = None,
     theme: str = "ink-yellow",
@@ -933,12 +934,14 @@ def generate_carousel(
     Args:
         post_text: The LinkedIn post text (may contain ``[claude logo]``,
             ``[[flowchart: ...]]``, ``[accent]`` instructions).
+        renderer: ``"pillow"`` (default, existing Pillow+img2pdf pipeline) or
+            ``"playwright"`` (HTML+Chromium, vector text, CSS themes).
         output_dir: Directory to save the PDF (or preview PNGs).
         title: Optional filename stem; auto-derived if omitted.
         theme: One of ``THEMES`` keys (default: ink-yellow).
         draft: Save to ``drafts/draft-carousels/`` instead of *output_dir*.
         split_mode: ``"detect"`` (auto/manual based on content),
-            ``"auto"`` (ignore markers), ``"manual"`` (require markers).
+            ``"auto`` (ignore markers), ``"manual"`` (require markers).
         logo: ``True`` for drawn badge, or a path to a logo image.
         logo_position: Where to place logo (``"top-right"``, ``"center-bottom"``).
         diagram_slides: Map of slide index -> diagram config (merged with
@@ -990,6 +993,55 @@ def generate_carousel(
         if not slides:
             raise ValueError("slide_filter produced an empty slide list.")
 
+    if not title:
+        first_line = slides[0]["title"] or slides[0]["body"]
+        title = re.sub(r"[^a-zA-Z0-9]+", "-", first_line.strip())[:50].strip("-")
+
+    if draft:
+        prefix = "draft-"
+    else:
+        prefix = ""
+    base_name = f"{prefix}{title.lower()}"
+
+    # ---- Playwright renderer path ----------------------------------------
+    if renderer == "playwright":
+        diagram_images: dict[int, Image.Image] = {}
+        for i, s in enumerate(slides):
+            if merged_diagrams and i in merged_diagrams:
+                cfg = merged_diagrams[i]
+                dt = cfg.get("type", "")
+                if dt == "flowchart":
+                    from lib.excalidraw import render_flowchart
+                    diagram_images[i] = render_flowchart(
+                        cfg["steps"], THEMES[theme],
+                        heading=cfg.get("heading", ""),
+                    )
+                elif dt == "comparison":
+                    from lib.excalidraw import render_comparison
+                    diagram_images[i] = render_comparison(
+                        cfg["left_title"], cfg.get("left_items", []),
+                        cfg["right_title"], cfg.get("right_items", []),
+                        THEMES[theme],
+                    )
+                elif dt == "framework":
+                    from lib.excalidraw import render_framework
+                    diagram_images[i] = render_framework(cfg.get("items", []), THEMES[theme])
+
+        output_path = _versioned_path(output_dir, base_name, ".pdf")
+
+        from lib.html_renderer import render_carousel as playwright_render
+        return playwright_render(
+            slides,
+            theme_name=theme,
+            decorate=parsed.decorate,
+            diagram_images=diagram_images or None,
+            logo_file=logo_file,
+            logo_position=logo_position,
+            logo_size=parsed.logo_size,
+            output_path=output_path,
+        )
+
+    # ---- Pillow renderer path --------------------------------------------
     images: list[Image.Image] = []
     overflow_warnings: list[str] = []
     for i, s in enumerate(slides):
@@ -1019,7 +1071,6 @@ def generate_carousel(
                          decorate=parsed.decorate,
                          diagram_image=diagram_img)
         )
-        # overflow check on body text
         body = s.get("body", "")
         if body:
             text_w = CANVAS_W - 120 if not diagram_img else int(CANVAS_W * 0.55) - 60
@@ -1030,10 +1081,6 @@ def generate_carousel(
 
     if logo_file and images and not preview_only:
         _draw_claude_logo(images[0], THEMES[theme], image_path=logo_file, position=logo_position, logo_size=parsed.logo_size)
-
-    if not title:
-        first_line = slides[0]["title"] or slides[0]["body"]
-        title = re.sub(r"[^a-zA-Z0-9]+", "-", first_line.strip())[:50].strip("-")
 
     # ---- preview mode: save PNGs, return dir ----------------------------
     if preview_only:
@@ -1063,11 +1110,6 @@ def generate_carousel(
         return os.path.abspath(output_dir)
 
     # ---- PDF mode -------------------------------------------------------
-    if draft:
-        prefix = "draft-"
-    else:
-        prefix = ""
-    base_name = f"{prefix}{title.lower()}"
     output_path = _versioned_path(output_dir, base_name, ".pdf")
 
     build_pdf(images, output_path)
